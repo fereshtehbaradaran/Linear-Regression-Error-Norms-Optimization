@@ -35,17 +35,23 @@ def infinity_norm(params):
 # Optimization
 initial_params = [0, 0]  # Initial guess for alpha and beta
 
+result_l0 = minimize(l0_norm, initial_params, method='SLSQP')
 result_l1 = minimize(l1_norm, initial_params, method='SLSQP')
 result_l2 = minimize(l2_norm, initial_params, method='SLSQP')
 result_inf = minimize(infinity_norm, initial_params, method='SLSQP')
 
-print(result_l1, result_l2, result_inf)
+print("L0:\t", "a:", result_l0.x[0], ", b:", result_l0.x[1])
+print("L1:\t", "a:", result_l1.x[0], ", b:", result_l1.x[1])
+print("L2:\t", "a:", result_l2.x[0], ", b:", result_l2.x[1])
+print("Infinity norm:\t", "a:", result_inf.x[0], ", b:", result_inf.x[1])
+
 
 # Visualization
 plt.figure(figsize=(10, 6))
 plt.scatter(x, y, label='Data points', marker='x', color='red')
 plt.plot(x, y_true, label='True line', color='black', linestyle='--')
 
+plt.plot(x, calculatePredicted_Y(x, *result_l1.x), label='L0 Norm Regression')
 plt.plot(x, calculatePredicted_Y(x, *result_l1.x), label='L1 Norm Regression')
 plt.plot(x, calculatePredicted_Y(x, *result_l2.x), label='L2 Norm Regression')
 plt.plot(x, calculatePredicted_Y(x, *result_inf.x), label='Infinity Norm Regression')
